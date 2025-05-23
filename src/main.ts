@@ -5,9 +5,13 @@ import { AppModule } from './base/app.module';
 import Constants from './config/constants';
 import { EnvEnum } from './common/enums/environment.enum';
 import { Config } from './config/configuration';
+import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
 	const app = await NestFactory.create(AppModule);
+
+	// Add global validation pipe
+	app.useGlobalPipes(new ValidationPipe());
 
 	const configService = app.get(ConfigService);
 	const config = configService.get<Config>('config');
@@ -17,11 +21,10 @@ async function bootstrap() {
 		.setTitle('Auth Api')
 		.setDescription('The Auth Api documentation')
 		.setVersion('1.0')
-		// .addBearerAuth()
 		.build();
 
-	const document: any = SwaggerModule.createDocument(app, swaggerConfig);
-	if (config?.Env != EnvEnum.PROD) SwaggerModule.setup('api/docs', app, document);
+	const document = SwaggerModule.createDocument(app, swaggerConfig);
+	if (config?.Env != EnvEnum.PROD) SwaggerModule.setup('api', app, document);
 
 	// CORS
 	app.enableCors({
@@ -32,7 +35,7 @@ async function bootstrap() {
 		const url = await app.getUrl();
 		console.log(`ENV= ${config?.Env}`);
 		console.log(`Server  running on ${url}`);
-		console.log(`Swagger running on ${url}/api/docs`);
+		console.log(`Swagger running on ${url}/api`);
 	});
 }
 bootstrap();
