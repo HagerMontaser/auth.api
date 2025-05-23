@@ -1,6 +1,6 @@
-import { Body, Request, Controller, Get, Post, UnauthorizedException, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, UnauthorizedException, UseGuards, HttpCode, HttpStatus } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBody, ApiBearerAuth } from '@nestjs/swagger';
-import { RegisterUserDto, LoginDto, RefreshDto } from './auth.dto';
+import { RegisterUserDto, LoginDto, TokenDto, TokenResponseDto } from './auth.dto';
 import { AuthService } from './auth.service';
 import { AccessGuard } from './guards/jwt-auth.guard';
 import { RefreshGuard } from './guards/jwt-refresh.guard';
@@ -12,6 +12,7 @@ export class AuthController {
 	constructor(private readonly authService: AuthService) {}
 
 	@Post('register')
+	@HttpCode(HttpStatus.CREATED)
 	@ApiOperation({ summary: 'Register a new auth' })
 	@ApiResponse({
 		status: 201,
@@ -20,13 +21,13 @@ export class AuthController {
 			example: {
 				message: 'auth registered successfully',
 				auth: {
-					firstName: 'John',
-					lastName: 'Doe',
-					email: 'john.doe@example.com',
-					address: '123 Main St',
-					country: 'USA',
-					city: 'New York',
-					phoneNumber: '+1234567890'
+					firstName: 'Alice',
+					lastName: 'Smith',
+					email: 'alice.smith@example.com',
+					address: '456 Elm St',
+					country: 'Canada',
+					city: 'Toronto',
+					phoneNumber: '+19876543210'
 				}
 			}
 		}
@@ -46,23 +47,23 @@ export class AuthController {
 			basic: {
 				summary: 'Basic registration',
 				value: {
-					firstName: 'John',
-					lastName: 'Doe',
-					email: 'john.doe@example.com',
-					password: 'password123'
+					firstName: 'Alice',
+					lastName: 'Smith',
+					email: 'alice.smith@example.com',
+					password: 'P@ssw0rd!'
 				}
 			},
 			full: {
 				summary: 'Full registration with all fields',
 				value: {
-					firstName: 'John',
-					lastName: 'Doe',
-					email: 'john.doe@example.com',
-					password: 'password123',
-					address: '123 Main St',
-					country: 'USA',
-					city: 'New York',
-					phoneNumber: '+1234567890'
+					firstName: 'Alice',
+					lastName: 'Smith',
+					email: 'alice.smith@example.com',
+					password: 'P@ssw0rd!',
+					address: '456 Elm St',
+					country: 'Canada',
+					city: 'Toronto',
+					phoneNumber: '+19876543210'
 				}
 			}
 		}
@@ -75,9 +76,10 @@ export class AuthController {
 	}
 
 	@Post('login')
+	@HttpCode(HttpStatus.OK)
 	@ApiOperation({ summary: 'Login with email and password' })
 	@ApiResponse({
-		status: 201,
+		status: 200,
 		description: 'Login successful, returns access and refresh tokens',
 		schema: {
 			example: {
@@ -97,7 +99,7 @@ export class AuthController {
 			default: {
 				summary: 'Login example',
 				value: {
-					email: 'john.doe@example.com',
+					email: 'alice.smith@example.com',
 					password: 'password123'
 				}
 			}
@@ -111,22 +113,60 @@ export class AuthController {
 		return this.authService.generateTokens(user.Id, user.email);
 	}
 
-	@UseGuards(RefreshGuard)
 	@Post('refresh')
-	async refresh(@Body() refreshDto: RefreshDto) {
-		return this.authService.refreshAccessToken(refreshDto.refreshToken, refreshDto.jti);
+	@UseGuards(RefreshGuard)
+	@HttpCode(HttpStatus.OK)
+	@ApiOperation({ summary: 'Refresh access token' })
+	@ApiResponse({
+		status: 200,
+		description: 'Access token refreshed successfully',
+		type: TokenResponseDto,
+		schema: {
+			example: {
+				accessToken: 'e...',
+				refreshToken: 'e...'
+			}
+		}
+	})
+	@ApiResponse({
+		status: 401,
+		description: 'Unauthorized - Invalid or expired refresh token'
+	})
+	@ApiBody({
+		type: TokenDto,
+		description: 'Refresh token data',
+		examples: {
+			default: {
+				summary: 'Refresh example',
+				value: {
+					jti: 'some-jti',
+					refreshToken: 'e...'
+				}
+			}
+		}
+	})
+	async refresh(@Body() TokenDto: TokenDto) {
+		return this.authService.refreshAccessToken(TokenDto.refreshToken, TokenDto.jti);
 	}
 
 	@Post('logout')
-	@UseGuards(RefreshGuard)
-	async logout(@Request() req: Request) {
-		const refreshToken = req.headers['authorization']?.split(' ')[1];
-		return this.authService.logout(refreshToken);
+	@HttpCode(HttpStatus.OK)
+	@ApiOperation({ summary: 'Logout and revoke refresh token' })
+	@ApiResponse({
+		status: 200,
+		description: 'Logout successful, refresh token revoked'
+	})
+	@ApiResponse({
+		status: 401,
+		description: 'Unauthorized - No or invalid refresh token'
+	})
+	async logout(@Body() TokenDto: TokenDto) {
+		return this.authService.logout(TokenDto.refreshToken, TokenDto.jti);
 	}
 
-	@UseGuards(AccessGuard)
 	@Get('protected')
-	async protected() {
+	@UseGuards(AccessGuard)
+	protected() {
 		return { message: 'Welcome to the application.' };
 	}
 }

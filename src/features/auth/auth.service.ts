@@ -28,7 +28,6 @@ export class AuthService {
 		}
 
 		const hash = await bcrypt.hash(createUserDto.password, 12);
-
 		const user = await this.userRepository.create({
 			...createUserDto,
 			password: hash
@@ -124,9 +123,12 @@ export class AuthService {
 		return { accessToken, refreshToken };
 	}
 
-	async logout(refreshToken: string) {
-		const refreshHashed = await bcrypt.hash(refreshToken, 10);
-		await this.refreshTokenRepository.updateOne({ refreshToken: refreshHashed }, { isRevoked: true });
-		return { success: true };
+	async logout(refreshToken: string, jti: string): Promise<{ success: boolean }> {
+		const refreshHashed = hashToken(refreshToken, this.appConfig.config.jwt.refreshTokenSecret);
+		const isSuccess = await this.refreshTokenRepository.updateOne(
+			{ refreshToken: refreshHashed, jti },
+			{ isRevoked: true }
+		);
+		return { success: isSuccess };
 	}
 }

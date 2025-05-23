@@ -5,6 +5,7 @@ import configuration from 'src/config/configuration';
 import { DataModule } from 'src/data/data.module';
 import { AuthModule } from 'src/features/auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
+import { CoursesModule } from 'src/features/courses/courses.module';
 
 @Module({
 	imports: [
@@ -15,7 +16,8 @@ import { JwtModule } from '@nestjs/jwt';
 		}),
 		JwtModule.register({ global: true }),
 		DataModule,
-		AuthModule
+		AuthModule,
+		CoursesModule
 	],
 	controllers: [AppController],
 	providers: []
