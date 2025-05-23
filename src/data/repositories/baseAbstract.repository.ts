@@ -1,4 +1,4 @@
-import { FilterQuery, HydratedDocument, Model } from 'mongoose';
+import { FilterQuery, HydratedDocument, Model, UpdateQuery } from 'mongoose';
 
 export abstract class BaseAbstractRepository<T> {
 	constructor(private readonly model: Model<T>) {}
@@ -12,7 +12,19 @@ export abstract class BaseAbstractRepository<T> {
 		return this.model.findOne(query);
 	}
 
+	findOneAndIncludePass(query: FilterQuery<T>): Promise<HydratedDocument<T> | null> {
+		return this.model.findOne(query).select('+password');
+	}
+
 	find(query: FilterQuery<T>): Promise<HydratedDocument<T>[]> {
 		return this.model.find(query);
+	}
+
+	updateOne(filter: FilterQuery<T>, query: UpdateQuery<T>) {
+		return this.model.updateOne(filter, query);
+	}
+
+	deleteMany(query: FilterQuery<T>) {
+		return this.model.deleteMany(query);
 	}
 }

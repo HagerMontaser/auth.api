@@ -4,6 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import configuration from 'src/config/configuration';
 import { DataModule } from 'src/data/data.module';
 import { AuthModule } from 'src/features/auth/auth.module';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
 	imports: [
@@ -12,6 +13,7 @@ import { AuthModule } from 'src/features/auth/auth.module';
 			isGlobal: true,
 			cache: true // restart the app after changing Env variables 3
 		}),
+		JwtModule.register({ global: true }),
 		DataModule,
 		AuthModule
 	],

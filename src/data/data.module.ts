@@ -5,16 +5,15 @@ import { Config } from 'src/config/configuration';
 
 @Module({
 	imports: [
-		ConfigModule,
 		MongooseModule.forRootAsync({
 			imports: [ConfigModule],
 			useFactory: async (configService: ConfigService) => {
 				const config = configService.get<Config>('config');
-				const { Host, Port, Name, authName, Password } = config?.Database ?? {};
+				const { host, port, name, userName, password } = config?.dataBase ?? {};
 				const uri =
-					authName && Password
-						? `mongodb://${encodeURIComponent(authName)}:${encodeURIComponent(Password)}@${Host}:${Port}/${Name}?authSource=admin`
-						: `mongodb://${Host}:${Port}/${Name}`;
+					userName && password
+						? `mongodb://${encodeURIComponent(userName)}:${encodeURIComponent(password)}@${host}:${port}/${name}?authSource=admin`
+						: `mongodb://${host}:${port}/${name}`;
 				return { uri };
 			},
 			inject: [ConfigService]

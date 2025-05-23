@@ -5,4 +5,4 @@ import { AppConfig } from './app.config';
 	providers: [AppConfig],
 	exports: [AppConfig]
 })
-export class ConfigModule {}
+export class AppConfigModule {}
