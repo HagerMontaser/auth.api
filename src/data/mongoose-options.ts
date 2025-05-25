@@ -11,7 +11,7 @@ export const mongooseOptions: MongooseModuleAsyncOptions = {
 			userName && password
 				? `mongodb://${encodeURIComponent(userName)}:${encodeURIComponent(password)}@${host}:${port}/${name}?authSource=admin`
 				: `mongodb://${host}:${port}/${name}`;
-		return { uri };
+		return { uri, sanitizeFilter: true };
 	},
 	inject: [ConfigService]
 };

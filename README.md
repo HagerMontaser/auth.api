@@ -42,6 +42,7 @@ A robust authentication API built with [NestJS](https://nestjs.com/), providing 
 - 🗄 **Session management**
     - Complete token audit trail
     - Granular revocation
+    - Revoke expired token periodically
 - 🛡 **Input validation**
     - Class-validator DTOs
     - Schema-level MongoDB validation
@@ -57,6 +58,9 @@ A robust authentication API built with [NestJS](https://nestjs.com/), providing 
 - **Swagger API Docs**: Interactive documentation at `/api`.
 - **Logging**: Comprehensive request and error logging using Winston.
 - **Global Exception Handling**: Centralized error handling with a global exception filter.
+- **MongoDB Integration**: Connects to MongoDB using Mongoose for schema-based modeling.
+- **Request Sanitization**: Prevents NoSQL injection by sanitizing inputs.
+- **Secure Headers**: Uses `helmet` to set HTTP security headers and protect against common vulnerabilities.
 
 ---
 
