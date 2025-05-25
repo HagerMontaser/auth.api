@@ -6,7 +6,6 @@ import { DataModule } from 'src/data/data.module';
 import { AuthModule } from 'src/features/auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
 import { CoursesModule } from 'src/features/courses/courses.module';
-import { TasksModule } from 'src/tasks/tasks.module';
 import { CommonModule } from 'src/common/common.module';
 
 @Module({
@@ -18,7 +17,6 @@ import { CommonModule } from 'src/common/common.module';
 		}),
 		JwtModule.register({ global: true }),
 		DataModule,
-		TasksModule,
 		AuthModule,
 		CoursesModule,
 		CommonModule

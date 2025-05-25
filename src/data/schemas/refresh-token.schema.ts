@@ -22,7 +22,7 @@ export class RefreshToken {
 	@Prop({ default: false })
 	isRevoked: boolean;
 
-	@Prop({ required: true })
+	@Prop({ required: true, expires: 0 })
 	expiresAt: Date;
 }
 
