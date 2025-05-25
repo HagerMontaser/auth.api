@@ -7,7 +7,7 @@ import { Config } from 'src/config/configuration';
 	imports: [
 		MongooseModule.forRootAsync({
 			imports: [ConfigModule],
-			useFactory: async (configService: ConfigService) => {
+			useFactory: (configService: ConfigService) => {
 				const config = configService.get<Config>('config');
 				const { host, port, name, userName, password } = config?.dataBase ?? {};
 				const uri =

@@ -7,6 +7,7 @@ import { AuthModule } from 'src/features/auth/auth.module';
 import { JwtModule } from '@nestjs/jwt';
 import { CoursesModule } from 'src/features/courses/courses.module';
 import { TasksModule } from 'src/tasks/tasks.module';
+import { CommonModule } from 'src/common/common.module';
 
 @Module({
 	imports: [
@@ -19,7 +20,8 @@ import { TasksModule } from 'src/tasks/tasks.module';
 		DataModule,
 		TasksModule,
 		AuthModule,
-		CoursesModule
+		CoursesModule,
+		CommonModule
 	],
 	controllers: [AppController],
 	providers: []

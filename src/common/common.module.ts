@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { ExceptionsFilter } from './filters/exception.filter';
 import { LoggingInterceptor } from './interceptors/Logging.Interceptor';
+import { LoggerService } from './logger/logger.service';
 
 @Module({
 	providers: [
@@ -12,8 +13,9 @@ import { LoggingInterceptor } from './interceptors/Logging.Interceptor';
 		{
 			provide: APP_FILTER,
 			useClass: ExceptionsFilter
-		}
+		},
+		LoggerService
 	],
-	exports: []
+	exports: [LoggerService]
 })
 export class CommonModule {}

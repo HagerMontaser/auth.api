@@ -1,8 +1,12 @@
-import { ExceptionFilter, Catch, ArgumentsHost, HttpException, HttpStatus } from '@nestjs/common';
+import { ExceptionFilter, Catch, ArgumentsHost, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Request, Response } from 'express';
+import { LoggerService } from '../logger/logger.service';
 
 @Catch()
+@Injectable()
 export class ExceptionsFilter implements ExceptionFilter {
+	constructor(private readonly logger: LoggerService) {}
+
 	catch(exception: unknown, host: ArgumentsHost) {
 		const ctx = host.switchToHttp();
 		const response = ctx.getResponse<Response>();
@@ -21,6 +25,12 @@ export class ExceptionsFilter implements ExceptionFilter {
 		} else {
 			normalizedMessage = { message: 'Unexpected error occurred' };
 		}
+
+		this.logger.error(
+			`Exception thrown: ${JSON.stringify(normalizedMessage)} - Status: ${status}`,
+			exception instanceof Error ? exception.stack : undefined,
+			request.url
+		);
 
 		response.status(status).json({
 			success: false,

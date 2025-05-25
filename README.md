@@ -55,6 +55,8 @@ A robust authentication API built with [NestJS](https://nestjs.com/), providing 
 - **Logout**: Invalidate refresh tokens.
 - **Protected Endpoints**: Access resources with a valid JWT.
 - **Swagger API Docs**: Interactive documentation at `/api`.
+- **Logging**: Comprehensive request and error logging using Winston.
+- **Global Exception Handling**: Centralized error handling with a global exception filter.
 
 ---
 
@@ -134,22 +136,15 @@ JWT_REFRESH_TOKEN_EXPIRATION_TIME = 7d
 
 ---
 
-## Deployment
+## CI/CD
 
-See [NestJS deployment docs](https://docs.nestjs.com/deployment) for best practices.
+![CI](https://github.com/HagerMontaser/auth.api/actions/workflows/ci.yml/badge.svg)
 
 ---
 
 ## Resources
 
 - [NestJS Documentation](https://docs.nestjs.com)
-- [Discord Community](https://discord.gg/G7Qnnhy)
-- [Official Courses](https://courses.nestjs.com/)
 - [NestJS Devtools](https://devtools.nestjs.com)
-- [Jobs Board](https://jobs.nestjs.com)
 
 ---
-
-## License
-
-MIT
