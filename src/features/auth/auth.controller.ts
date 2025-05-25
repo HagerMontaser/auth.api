@@ -13,24 +13,10 @@ export class AuthController {
 
 	@Post('register')
 	@HttpCode(HttpStatus.CREATED)
-	@ApiOperation({ summary: 'Register a new auth' })
+	@ApiOperation({ summary: 'Register a new user' })
 	@ApiResponse({
 		status: 201,
-		description: 'auth registered successfully',
-		schema: {
-			example: {
-				message: 'auth registered successfully',
-				auth: {
-					firstName: 'Alice',
-					lastName: 'Smith',
-					email: 'alice.smith@example.com',
-					address: '456 Elm St',
-					country: 'Canada',
-					city: 'Toronto',
-					phoneNumber: '+19876543210'
-				}
-			}
-		}
+		description: 'user registered successfully'
 	})
 	@ApiResponse({
 		status: 400,
@@ -42,7 +28,7 @@ export class AuthController {
 	})
 	@ApiBody({
 		type: RegisterUserDto,
-		description: 'auth registration data',
+		description: 'user registration data',
 		examples: {
 			basic: {
 				summary: 'Basic registration',

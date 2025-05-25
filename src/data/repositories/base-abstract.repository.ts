@@ -16,10 +16,6 @@ export abstract class BaseAbstractRepository<T> {
 		return this.model.findOne(query).select('+password');
 	}
 
-	find(query: FilterQuery<T>): Promise<HydratedDocument<T>[]> {
-		return this.model.find(query);
-	}
-
 	async updateOne(filter: FilterQuery<T>, query: UpdateQuery<T>): Promise<boolean> {
 		const result = await this.model.updateOne(filter, query);
 		return result.modifiedCount > 0;
