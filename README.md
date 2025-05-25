@@ -143,6 +143,7 @@ JWT_REFRESH_TOKEN_EXPIRATION_TIME = 7d
 ## CI/CD
 
 ![CI](https://github.com/HagerMontaser/auth.api/actions/workflows/ci.yml/badge.svg)
+![CD](https://github.com/HagerMontaser/auth.api/actions/workflows/cd.yml/badge.svg)
 
 ---
 
