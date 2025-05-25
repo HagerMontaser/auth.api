@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
@@ -46,6 +45,7 @@ async function bootstrap() {
 		const message = reason instanceof Error ? reason.message : JSON.stringify(reason);
 		const stack = reason instanceof Error ? reason.stack : undefined;
 		logger.error(`Unhandled Rejection: ${message}`, stack, 'UnhandledRejection');
+		process.exit(1);
 	});
 
 	process.on('uncaughtException', (error: Error) => {

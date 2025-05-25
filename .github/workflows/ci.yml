@@ -1,29 +1,31 @@
 name: Auth API CI
 
 on:
-    push:
-        branches: [main]
     pull_request:
+        branches: [main]
+    push:
         branches: [main]
 
 jobs:
-    build-and-test:
+    ci:
         runs-on: ubuntu-latest
 
         steps:
-            - name: Checkout code
-              uses: actions/checkout@v3
+            - uses: actions/checkout@v3
 
-            - name: Use Node.js 18
+            - name: Set up Node.js
               uses: actions/setup-node@v3
               with:
-                  node-version: '18'
+                  node-version: 18
 
             - name: Install dependencies
-              run: npm install
+              run: npm ci
 
-            - name: Run tests
-              run: npm run test
+            - name: Lint
+              run: npm run lint
 
-            - name: Run Build
+            - name: Build
               run: npm run build
+
+            - name: Test
+              run: npm run test
